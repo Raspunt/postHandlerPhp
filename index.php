@@ -9,9 +9,11 @@ $remote_url = $_SERVER['REQUEST_URI'];
 
 
 $prod = new ProductDb();
-// $prod->CreateProductsTable($con);
+$users = new UserDb();
+$prod->CreateProductsTable($con);
+$users->CreateUsersTable($con);
+// $prod->InsertProductsRecord($con,"Картошка","Овощь",150,"/home/maxim");
 
-// $con находиться в mysql_db.php
 
 switch ($remote_url){
 
@@ -29,7 +31,6 @@ switch ($remote_url){
         break;
     
     case "/AppProduct":
-
         if ($_SERVER['REQUEST_METHOD'] == "POST"){   
             
             $title = $_POST["title"];
@@ -50,11 +51,38 @@ switch ($remote_url){
              
             $title = $_POST["title"];
             $prod->SearchByTitle($con,$title);
-
-        }else{
-            print_r("Это не Post это " . $_SERVER['REQUEST_METHOD']);
+            
+            break;
         }
+    
+    case "/CreateUser":
+        
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+            $username = $_POST["username"];
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+
+            $encrypted_password = password_hash($password,PASSWORD_DEFAULT);
+
+            $users->InsertUser($con,$username,$email,$encrypted_password);
+            print_r("User created");
+            
+
         break;
+        }
+
+    case "/IsUserAuthenticated":
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+            $username = $_POST["username"];
+            $password = $_POST["password"];
+
+            $users->IsUserAuthenticated($con,$username,$password);
+
+        break;
+        }
 
 
 

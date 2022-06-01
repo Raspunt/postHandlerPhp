@@ -93,7 +93,7 @@ class UserDb{
 
 
         $sql = "
-            CREATE TABLE IF NOT EXISTS user (
+            CREATE TABLE IF NOT EXISTS users (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(100) NOT NULL,
                 email VARCHAR(200) NOT NULL,
@@ -105,7 +105,73 @@ class UserDb{
 
     }
 
+    function SelectAllUsers($db){
 
+
+        $sql ="
+            SELECT * FROM users;
+        ";
+
+
+
+        if ($res = $db->query($sql)) {
+            $rows = $res->fetch_all(MYSQLI_ASSOC);
+            echo json_encode($rows);
+        } else {
+            echo $con->error;
+        }
+
+    }
+
+    function InsertUser($db,$username,$email,$password){
+
+
+        $sql = "
+            INSERT INTO users (username,email,password)
+            VALUES ('$username','$email','$password');
+        ";
+
+        $db->query($sql);
+    }
+
+
+    function IsUserAuthenticated($db,$username,$password){
+
+        $sql = "
+            select * from users where username='$username';
+        ";
+
+        $result = $db->query($sql);
+        $rows = $result->fetch_all(MYSQLI_ASSOC);
+        $hash_password = $rows[0]["password"];
+
+        echo password_verify($password,$hash_password);
+
+        
+        
+
+
+    }
+
+}
+
+class OrderDb{
+
+
+    function CreateOrderTable($db){
+        
+        $sql = "
+        CREATE TABLE IF NOT EXISTS orders (
+            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            products_id TEXT NOT NULL,
+            ) 
+        ";
+
+        $db->query($sql);
+
+    }
+
+    
 }
 
 
