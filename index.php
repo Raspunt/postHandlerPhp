@@ -10,8 +10,12 @@ $remote_url = $_SERVER['REQUEST_URI'];
 
 $prod = new ProductDb();
 $users = new UserDb();
-$prod->CreateProductsTable($con);
-$users->CreateUsersTable($con);
+$Orders = new OrderDb();
+
+// $prod->CreateProductsTable($con);
+// $users->CreateUsersTable($con);
+// $Orders->CreateOrderTable($con);
+
 // $prod->InsertProductsRecord($con,"Картошка","Овощь",150,"/home/maxim");
 
 
@@ -83,6 +87,33 @@ switch ($remote_url){
 
         break;
         }
+
+    case "/MakeOrder":
+
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            
+            print_r($_POST);
+
+            
+
+
+            $product_id = $_POST['product_id']  ;
+            $country=$_POST['country'];
+            $city=$_POST['city'];
+            $streetAndHouse=$_POST['streetAndHouse'];
+            
+            
+
+
+            $Orders->InsertOrder($con,$product_id,$country,$city,$streetAndHouse);
+            
+
+            break;
+        };
+
+
+        
 
 
 

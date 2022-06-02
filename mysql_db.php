@@ -161,15 +161,45 @@ class OrderDb{
     function CreateOrderTable($db){
         
         $sql = "
-        CREATE TABLE IF NOT EXISTS orders (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            products_id TEXT NOT NULL,
-            ) 
-        ";
+            CREATE TABLE IF NOT EXISTS orders (
+                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                products_id TEXT NOT NULL,
+                country VARCHAR(150) NOT NULL,
+                street VARCHAR(150) NOT NULL
+                ) 
+            ";
 
         $db->query($sql);
 
     }
+
+    function SelectAllOrders($dp){
+        
+        
+        $sql = "
+            select * from orders;
+        ";
+
+        $res = $db->query($sql);
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($rows);
+
+    }
+
+    function InsertOrder($db,$products_id,$country,$City,$streetAndHouse){
+        
+        $sql = "
+            INSERT INTO orders (products_id,country,City,streetAndHouse)
+            VALUES ('$products_id','$country','$City','$streetAndHouse');
+        ";
+
+        $db->query($sql);
+    }
+
+
+    
+
+
 
     
 }
